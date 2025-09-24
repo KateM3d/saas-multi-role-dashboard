@@ -1,5 +1,5 @@
-import { FormEvent, useState } from "react";
-import { User, users } from "../../config/users";
+import { type FormEvent, useState } from "react";
+import { type User, users } from "../../config/users";
 import "./Login.scss";
 
 interface LoginFormData {

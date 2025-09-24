@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { User } from "../../config/users";
+import { type ReactNode } from "react";
+import { type User } from "../../config/users";
 import "./DashboardLayout.scss";
 
 interface DashboardLayoutProps {
