@@ -88,6 +88,14 @@
   align-items: center;
   color: #64748b;
   font-size: 14px;
+
+  .assignees {
+    background: #e0f2fe;
+    color: #0284c7;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
 }
 
 .task-actions {

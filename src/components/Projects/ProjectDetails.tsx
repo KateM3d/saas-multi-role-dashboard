@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
+import { projectTeamMembers } from "../../config/projectTeam";
 import { sampleTasks } from "../../config/tasks";
 import { sampleTeams } from "../../config/teams";
 
@@ -44,25 +45,27 @@ export function ProjectDetails() {
 
       <div className="project-sections">
         <div className="section team-section">
-          <h3>Project Team - {projectTeam?.name}</h3>
+          <h3>Project Team</h3>
           <div className="team-members">
-            {projectTeam?.members.map((member) => (
-              <div key={member.id} className="team-member">
-                <div className="member-avatar">
-                  {member.avatar ? (
-                    <img src={member.avatar} alt={member.name} />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      {member.name.charAt(0)}
+            {project?.teamMembers.map((email) => {
+              const member = projectTeamMembers.find((m) => m.email === email);
+              return (
+                member && (
+                  <div key={member.id} className="team-member">
+                    <div className="member-avatar">
+                      <div className="avatar-placeholder">
+                        {member.name.charAt(0)}
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="member-info">
-                  <h4>{member.name}</h4>
-                  <span>{member.role}</span>
-                </div>
-              </div>
-            ))}
+                    <div className="member-info">
+                      <h4>{member.name}</h4>
+                      <span className="member-role">{member.role}</span>
+                      <span className="member-position">{member.position}</span>
+                    </div>
+                  </div>
+                )
+              );
+            })}
           </div>
         </div>
 

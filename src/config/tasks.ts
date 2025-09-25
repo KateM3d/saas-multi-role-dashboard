@@ -6,7 +6,7 @@ export interface Task {
   status: "pending" | "in_progress" | "completed";
   dueDate: string;
   priority: "high" | "medium" | "low";
-  assignee: string;
+  assignees: string[];
   projectId: string;
 }
 
@@ -21,7 +21,7 @@ export const sampleTasks: Task[] = [
     status: "completed",
     dueDate: formatDate(addDays(today, -2)),
     priority: "high",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p1",
   },
   {
@@ -30,7 +30,7 @@ export const sampleTasks: Task[] = [
     status: "in_progress",
     dueDate: formatDate(addDays(today, 1)), // Due soon
     priority: "high",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p1",
   },
   {
@@ -39,7 +39,7 @@ export const sampleTasks: Task[] = [
     status: "completed",
     dueDate: formatDate(addDays(today, -5)),
     priority: "medium",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p1",
   },
   {
@@ -48,7 +48,7 @@ export const sampleTasks: Task[] = [
     status: "pending",
     dueDate: formatDate(addDays(today, 2)), // Due soon
     priority: "low",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p1",
   },
   {
@@ -57,7 +57,7 @@ export const sampleTasks: Task[] = [
     status: "completed",
     dueDate: formatDate(addDays(today, -1)),
     priority: "medium",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p1",
   },
 
@@ -68,7 +68,7 @@ export const sampleTasks: Task[] = [
     status: "in_progress",
     dueDate: formatDate(addDays(today, 1)), // Due soon
     priority: "high",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p2",
   },
   {
@@ -77,7 +77,7 @@ export const sampleTasks: Task[] = [
     status: "completed",
     dueDate: formatDate(addDays(today, -3)),
     priority: "high",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p2",
   },
   {
@@ -86,7 +86,7 @@ export const sampleTasks: Task[] = [
     status: "pending",
     dueDate: formatDate(addDays(today, 5)),
     priority: "medium",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p2",
   },
   {
@@ -95,7 +95,7 @@ export const sampleTasks: Task[] = [
     status: "in_progress",
     dueDate: formatDate(addDays(today, 2)), // Due soon
     priority: "high",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p2",
   },
   {
@@ -104,7 +104,7 @@ export const sampleTasks: Task[] = [
     status: "pending",
     dueDate: formatDate(addDays(today, 7)),
     priority: "medium",
-    assignee: "Current User",
+    assignees: ["user@example.com"],
     projectId: "p2",
   },
 ];

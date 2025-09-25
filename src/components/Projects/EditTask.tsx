@@ -1,29 +1,17 @@
 import { useState } from "react";
+import { Task } from "../../config/tasks";
 import { UserAssignment } from "../Common/UserAssignment";
-import "./CreateTask.scss";
+import "./CreateTask.scss"; // Reusing the same styles
 
-interface CreateTaskProps {
+interface EditTaskProps {
+  task: Task;
   onClose: () => void;
-  onSubmit: (taskData: {
-    title: string;
-    description: string;
-    dueDate: string;
-    priority: "high" | "medium" | "low";
-    projectId: string;
-  }) => void;
-  projectId: string;
+  onSubmit: (taskData: Task) => void;
 }
 
-export function CreateTask({ onClose, onSubmit, projectId }: CreateTaskProps) {
+export function EditTask({ task, onClose, onSubmit }: EditTaskProps) {
   const [showAssignUsers, setShowAssignUsers] = useState(false);
-  const [taskData, setTaskData] = useState({
-    title: "",
-    description: "",
-    dueDate: "",
-    priority: "medium" as "high" | "medium" | "low",
-    projectId: projectId,
-    assignees: [] as string[],
-  });
+  const [taskData, setTaskData] = useState(task);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +21,7 @@ export function CreateTask({ onClose, onSubmit, projectId }: CreateTaskProps) {
   return (
     <div className="modal">
       <div className="modal-content">
-        <h3>Create New Task</h3>
+        <h3>Edit Task</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Task Title</label>
@@ -47,14 +35,24 @@ export function CreateTask({ onClose, onSubmit, projectId }: CreateTaskProps) {
             />
           </div>
           <div className="form-group">
-            <label>Description</label>
-            <textarea
-              value={taskData.description}
+            <label>Status</label>
+            <select
+              value={taskData.status}
               onChange={(e) =>
-                setTaskData({ ...taskData, description: e.target.value })
+                setTaskData({
+                  ...taskData,
+                  status: e.target.value as
+                    | "pending"
+                    | "in_progress"
+                    | "completed",
+                })
               }
               required
-            />
+            >
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
           </div>
           <div className="form-group">
             <label>Due Date</label>
@@ -98,7 +96,7 @@ export function CreateTask({ onClose, onSubmit, projectId }: CreateTaskProps) {
           </div>
           <div className="form-actions">
             <button type="submit" className="btn-primary">
-              Create Task
+              Update Task
             </button>
             <button type="button" className="btn-secondary" onClick={onClose}>
               Cancel
