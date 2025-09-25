@@ -134,11 +134,17 @@ export function DashboardContent({ user }: DashboardContentProps) {
           onSubmit={(projectData) => {
             // Add new project to sampleProjects
             const newProject = {
-              id: (sampleProjects.length + 1).toString(),
+              id: `p${sampleProjects.length + 1}`,
               ...projectData,
-              status: "active",
+              status: "active" as "active",
               progress: 0,
-              members: [],
+              teamMembers: [],
+              tasks: {
+                total: 0,
+                completed: 0,
+                inProgress: 0,
+                pending: 0,
+              },
             };
             sampleProjects.push(newProject);
             setShowCreateProject(false);

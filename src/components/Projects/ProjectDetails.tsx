@@ -15,6 +15,8 @@ export function ProjectDetails({ userRole }: ProjectDetailsProps) {
   const [showUpdateStatus, setShowUpdateStatus] = useState<Task | null>(null);
   const isAdminOrManager = userRole === "admin" || userRole === "manager";
   const { projectId } = useParams();
+  console.log("ProjectDetails - projectId:", projectId);
+  console.log("ProjectDetails - available projects:", sampleProjects);
   const project = sampleProjects.find((p) => p.id === projectId);
   const projectTasks = sampleTasks.filter(
     (task) => task.projectId === projectId
