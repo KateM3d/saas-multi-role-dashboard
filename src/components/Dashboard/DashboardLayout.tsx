@@ -17,12 +17,7 @@ const getNavigationItems = (role: string) => {
         { label: "Settings", link: "/settings" },
       ];
     case "manager":
-      return [
-        { label: "Dashboard", link: "/" },
-        { label: "Task Management", link: "/tasks" },
-        { label: "Progress Tracking", link: "/progress" },
-        { label: "Reports", link: "/reports" },
-      ];
+      return [{ label: "Dashboard", link: "/" }];
     case "user":
       return [
         { label: "Dashboard", link: "/" },

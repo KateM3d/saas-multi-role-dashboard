@@ -5,6 +5,7 @@ import { DashboardContent } from "./components/Dashboard/DashboardContent";
 import { DashboardLayout } from "./components/Dashboard/DashboardLayout";
 import { Login } from "./components/Login/Login";
 import { MyProjects } from "./components/Projects/MyProjects";
+import { ProjectDetails } from "./components/Projects/ProjectDetails";
 import { User } from "./config/users";
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
               <Route
                 index
                 element={
-                  currentUser.role === "reader" ? (
+                  ["reader", "manager"].includes(currentUser.role) ? (
                     <DashboardContent user={currentUser} />
                   ) : (
                     <Navigate to="/dashboard" replace />
@@ -45,6 +46,13 @@ function App() {
               />
               {currentUser.role !== "reader" && (
                 <Route path="my-projects" element={<MyProjects />} />
+              )}
+              {(currentUser.role === "manager" ||
+                currentUser.role === "admin") && (
+                <Route
+                  path="projects/:projectId"
+                  element={<ProjectDetails />}
+                />
               )}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

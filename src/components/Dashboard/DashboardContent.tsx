@@ -1,80 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
-import { sampleTasks } from "../../config/tasks";
 import { User } from "../../config/users";
-import { UserView } from "./UserView";
 
 interface DashboardContentProps {
   user: User;
 }
 
 export function DashboardContent({ user }: DashboardContentProps) {
-  const renderAdminContent = () => (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        <div className="stat-card">
-          <h3>Total Teams</h3>
-          <p className="stat">8</p>
-          <span className="label">Active Teams</span>
-        </div>
-        <div className="stat-card">
-          <h3>Total Projects</h3>
-          <p className="stat">24</p>
-          <span className="label">In Progress</span>
-        </div>
-        <div className="stat-card">
-          <h3>Team Members</h3>
-          <p className="stat">47</p>
-          <span className="label">Across All Teams</span>
-        </div>
-      </div>
-    </div>
-  );
+  const navigate = useNavigate();
 
-  const renderManagerContent = () => (
-    <div>
-      <h2>Manager Dashboard</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        <div className="stat-card">
-          <h3>Active Tasks</h3>
-          <p className="stat">32</p>
-          <span className="label">In Progress</span>
-        </div>
-        <div className="stat-card">
-          <h3>Team Performance</h3>
-          <p className="stat">87%</p>
-          <span className="label">Task Completion Rate</span>
-        </div>
-        <div className="stat-card">
-          <h3>Upcoming Deadlines</h3>
-          <p className="stat">5</p>
-          <span className="label">This Week</span>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderUserContent = () => (
-    <div>
-      <UserView tasks={sampleTasks} />
-    </div>
-  );
-
-  const renderViewerContent = () => {
+  const renderDashboardView = () => {
     // Calculate overall project statistics
     const totalProjects = sampleProjects.length;
     const averageProgress = Math.round(
@@ -84,6 +19,12 @@ export function DashboardContent({ user }: DashboardContentProps) {
     const activeProjects = sampleProjects.filter(
       (p) => p.status === "active"
     ).length;
+
+    const handleProjectClick = (projectId: string) => {
+      if (user.role === "manager") {
+        navigate(`/projects/${projectId}`);
+      }
+    };
 
     return (
       <div>
@@ -125,7 +66,14 @@ export function DashboardContent({ user }: DashboardContentProps) {
           <h3>Projects Status</h3>
           <div className="projects-grid" style={{ marginTop: "20px" }}>
             {sampleProjects.map((project) => (
-              <div key={project.id} className="project-card">
+              <div
+                key={project.id}
+                className="project-card"
+                onClick={() => handleProjectClick(project.id)}
+                style={{
+                  cursor: user.role === "manager" ? "pointer" : "default",
+                }}
+              >
                 <div className="project-header">
                   <h4>{project.name}</h4>
                   <span className={`status-badge ${project.status}`}>
@@ -158,19 +106,41 @@ export function DashboardContent({ user }: DashboardContentProps) {
   };
 
   const renderContent = () => {
-    switch (user.role) {
-      case "admin":
-        return renderAdminContent();
-      case "manager":
-        return renderManagerContent();
-      case "user":
-        return renderUserContent();
-      case "reader":
-        return renderViewerContent();
-      default:
-        return <div>No content available</div>;
-    }
+    // All roles see the same dashboard view
+    return renderDashboardView(
+      user.role === "manager" || user.role === "admin"
+    );
   };
+
+  const renderAdminContent = () => (
+    <div>
+      <h2>Admin Dashboard</h2>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gap: "20px",
+          marginTop: "20px",
+        }}
+      >
+        <div className="stat-card">
+          <h3>Total Teams</h3>
+          <p className="stat">8</p>
+          <span className="label">Active Teams</span>
+        </div>
+        <div className="stat-card">
+          <h3>Total Projects</h3>
+          <p className="stat">24</p>
+          <span className="label">In Progress</span>
+        </div>
+        <div className="stat-card">
+          <h3>Team Members</h3>
+          <p className="stat">47</p>
+          <span className="label">Across All Teams</span>
+        </div>
+      </div>
+    </div>
+  );
 
   return <div className="dashboard-content">{renderContent()}</div>;
 }
