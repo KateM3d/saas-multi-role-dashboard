@@ -29,12 +29,23 @@ function App() {
                 <DashboardLayout user={currentUser} onLogout={handleLogout} />
               }
             >
-              <Route index element={<DashboardContent user={currentUser} />} />
+              <Route
+                index
+                element={
+                  currentUser.role === "reader" ? (
+                    <DashboardContent user={currentUser} />
+                  ) : (
+                    <Navigate to="/dashboard" replace />
+                  )
+                }
+              />
               <Route
                 path="dashboard"
                 element={<DashboardContent user={currentUser} />}
               />
-              <Route path="my-projects" element={<MyProjects />} />
+              {currentUser.role !== "reader" && (
+                <Route path="my-projects" element={<MyProjects />} />
+              )}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
