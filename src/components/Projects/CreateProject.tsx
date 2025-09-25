@@ -30,8 +30,9 @@ export function CreateProject({ onClose, onSubmit }: CreateProjectProps) {
         <h3>Create New Project</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Project Name</label>
+            <label htmlFor="project-name">Project Name</label>
             <input
+              id="project-name"
               type="text"
               value={projectData.name}
               onChange={(e) =>
@@ -41,8 +42,9 @@ export function CreateProject({ onClose, onSubmit }: CreateProjectProps) {
             />
           </div>
           <div className="form-group">
-            <label>Description</label>
+            <label htmlFor="project-description">Description</label>
             <textarea
+              id="project-description"
               value={projectData.description}
               onChange={(e) =>
                 setProjectData({ ...projectData, description: e.target.value })
@@ -51,8 +53,9 @@ export function CreateProject({ onClose, onSubmit }: CreateProjectProps) {
             />
           </div>
           <div className="form-group">
-            <label>Start Date</label>
+            <label htmlFor="start-date">Start Date</label>
             <input
+              id="start-date"
               type="date"
               value={projectData.startDate}
               onChange={(e) =>
@@ -62,8 +65,9 @@ export function CreateProject({ onClose, onSubmit }: CreateProjectProps) {
             />
           </div>
           <div className="form-group">
-            <label>End Date</label>
+            <label htmlFor="end-date">End Date</label>
             <input
+              id="end-date"
               type="date"
               value={projectData.endDate}
               onChange={(e) =>
