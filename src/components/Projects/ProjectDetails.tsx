@@ -1,17 +1,24 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
 import { projectTeamMembers } from "../../config/projectTeam";
-import { sampleTasks } from "../../config/tasks";
-import { sampleTeams } from "../../config/teams";
+import { sampleTasks, Task } from "../../config/tasks";
+import { EditTask } from "./EditTask";
+import "./ProjectDetails.scss";
 
-export function ProjectDetails() {
+interface ProjectDetailsProps {
+  userRole: string;
+}
+
+export function ProjectDetails({ userRole }: ProjectDetailsProps) {
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [showUpdateStatus, setShowUpdateStatus] = useState<Task | null>(null);
+  const isAdminOrManager = userRole === "admin" || userRole === "manager";
   const { projectId } = useParams();
   const project = sampleProjects.find((p) => p.id === projectId);
   const projectTasks = sampleTasks.filter(
     (task) => task.projectId === projectId
   );
-  // For demo purposes, assign first team to first project, second team to second project
-  const projectTeam = sampleTeams[parseInt(projectId || "1") - 1];
 
   if (!project) {
     return <div>Project not found</div>;
@@ -83,15 +90,27 @@ export function ProjectDetails() {
                 <div className="task-details">
                   <div className="task-info">
                     <span>Due: {task.dueDate}</span>
-                    <span>Assignee: {task.assignee}</span>
+                    <span>Assignees: {task.assignees.join(", ")}</span>
                     <span className={`status-badge ${task.status}`}>
                       {task.status.replace("_", " ")}
                     </span>
                   </div>
-                  <div className="task-actions">
-                    <button className="btn-update">Update Status</button>
-                    <button className="btn-edit">Edit</button>
-                  </div>
+                  {isAdminOrManager && (
+                    <div className="task-actions">
+                      <button
+                        className="btn-update"
+                        onClick={() => setShowUpdateStatus(task)}
+                      >
+                        Update Status
+                      </button>
+                      <button
+                        className="btn-edit"
+                        onClick={() => setEditingTask(task)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -99,258 +118,77 @@ export function ProjectDetails() {
         </div>
       </div>
 
-      <style jsx>{`
-        .project-details {
-          padding: 20px 0;
-        }
+      {/* Edit Task Modal */}
+      {editingTask && (
+        <EditTask
+          task={editingTask}
+          onClose={() => setEditingTask(null)}
+          onSubmit={(updatedTask) => {
+            const taskIndex = sampleTasks.findIndex(
+              (t) => t.id === updatedTask.id
+            );
+            if (taskIndex !== -1) {
+              sampleTasks[taskIndex] = updatedTask;
+            }
+            setEditingTask(null);
+          }}
+        />
+      )}
 
-        .project-header {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          margin-bottom: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
+      {/* Update Status Modal */}
+      {showUpdateStatus && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Update Task Status</h3>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!showUpdateStatus) return;
 
-        .project-title {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          margin-bottom: 16px;
-
-          h2 {
-            color: #213448;
-            font-size: 24px;
-            margin: 0;
-          }
-        }
-
-        .project-description {
-          color: #64748b;
-          font-size: 15px;
-          margin-bottom: 24px;
-          line-height: 1.6;
-        }
-
-        .project-meta {
-          display: flex;
-          gap: 32px;
-          padding-top: 24px;
-          border-top: 1px solid #e2e8f0;
-        }
-
-        .meta-item {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-
-          .label {
-            color: #64748b;
-            font-size: 13px;
-          }
-
-          .value {
-            color: #213448;
-            font-size: 15px;
-            font-weight: 500;
-          }
-        }
-
-        .project-sections {
-          display: grid;
-          grid-template-columns: 300px 1fr;
-          gap: 24px;
-        }
-
-        .section {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-          h3 {
-            color: #213448;
-            font-size: 18px;
-            margin-bottom: 20px;
-          }
-        }
-
-        .team-members {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .team-member {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px;
-          border-radius: 8px;
-          border: 1px solid #e2e8f0;
-        }
-
-        .member-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
-          overflow: hidden;
-
-          .avatar-placeholder {
-            width: 100%;
-            height: 100%;
-            background: #3b82f6;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 500;
-          }
-
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
-        }
-
-        .member-info {
-          h4 {
-            color: #213448;
-            font-size: 15px;
-            margin: 0 0 4px 0;
-          }
-
-          span {
-            color: #64748b;
-            font-size: 13px;
-          }
-        }
-
-        .tasks-list {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .task-card {
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          padding: 16px;
-        }
-
-        .task-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 12px;
-
-          h4 {
-            color: #213448;
-            font-size: 15px;
-            margin: 0;
-          }
-        }
-
-        .task-details {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .task-info {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          color: #64748b;
-          font-size: 14px;
-        }
-
-        .task-actions {
-          display: flex;
-          gap: 8px;
-        }
-
-        .btn-update,
-        .btn-edit {
-          padding: 6px 12px;
-          border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .btn-update {
-          background: #3b82f6;
-          color: white;
-          border: none;
-
-          &:hover {
-            background: #2563eb;
-          }
-        }
-
-        .btn-edit {
-          background: white;
-          color: #64748b;
-          border: 1px solid #e2e8f0;
-
-          &:hover {
-            background: #f1f5f9;
-          }
-        }
-
-        .status-badge {
-          padding: 4px 12px;
-          border-radius: 12px;
-          font-size: 12px;
-          font-weight: 500;
-
-          &.active {
-            background: #dcfce7;
-            color: #22c55e;
-          }
-
-          &.completed {
-            background: #e0f2fe;
-            color: #0284c7;
-          }
-
-          &.on_hold {
-            background: #fef3c7;
-            color: #f59e0b;
-          }
-        }
-
-        .priority-badge {
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 12px;
-          font-weight: 500;
-
-          &.high {
-            background: #fee2e2;
-            color: #ef4444;
-          }
-
-          &.medium {
-            background: #fef3c7;
-            color: #f59e0b;
-          }
-
-          &.low {
-            background: #dcfce7;
-            color: #22c55e;
-          }
-        }
-
-        @media (max-width: 1024px) {
-          .project-sections {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
+                const taskIndex = sampleTasks.findIndex(
+                  (t) => t.id === showUpdateStatus.id
+                );
+                if (taskIndex !== -1) {
+                  const form = e.target as HTMLFormElement;
+                  const status = (
+                    form.elements.namedItem("status") as HTMLSelectElement
+                  ).value;
+                  sampleTasks[taskIndex] = {
+                    ...sampleTasks[taskIndex],
+                    status: status as "pending" | "in_progress" | "completed",
+                  };
+                }
+                setShowUpdateStatus(null);
+              }}
+            >
+              <div className="form-group">
+                <label>Status</label>
+                <select
+                  name="status"
+                  defaultValue={showUpdateStatus.status}
+                  required
+                >
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="btn-primary">
+                  Update Status
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setShowUpdateStatus(null)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

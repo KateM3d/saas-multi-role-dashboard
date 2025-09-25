@@ -16,7 +16,10 @@ const getNavigationItems = (role: string) => {
         { label: "My Projects", link: "my-projects" },
       ];
     case "manager":
-      return [{ label: "Dashboard", link: "/" }];
+      return [
+        { label: "Dashboard", link: "/" },
+        { label: "My Projects", link: "my-projects" },
+      ];
     case "user":
       return [
         { label: "Dashboard", link: "/" },

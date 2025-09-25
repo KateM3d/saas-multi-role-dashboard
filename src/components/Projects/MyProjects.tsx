@@ -11,7 +11,10 @@ interface MyProjectsProps {
 }
 
 export function MyProjects({ userRole }: MyProjectsProps) {
-  const canEditTasks = userRole === "admin" || userRole === "manager";
+  // Admin and Manager can do everything
+  const isAdminOrManager = userRole === "admin" || userRole === "manager";
+  const canEditTasks = isAdminOrManager;
+  const canUpdateStatus = isAdminOrManager || userRole === "user";
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showUpdateStatus, setShowUpdateStatus] = useState<Task | null>(null);
@@ -26,7 +29,7 @@ export function MyProjects({ userRole }: MyProjectsProps) {
     <div className="my-projects">
       <div className="my-projects__header">
         <h2>My Projects</h2>
-        {selectedProject !== "all" && (
+        {selectedProject !== "all" && isAdminOrManager && (
           <button
             className="btn-primary"
             onClick={() => setShowCreateTask(true)}
@@ -77,39 +80,41 @@ export function MyProjects({ userRole }: MyProjectsProps) {
                   </span>
                 )}
               </div>
-              {canEditTasks && (
-                <div className="task-actions">
+              <div className="task-actions">
+                {canUpdateStatus && (
                   <button
                     className="btn-update"
                     onClick={() => setShowUpdateStatus(task)}
                   >
                     Update Status
                   </button>
+                )}
+                {canEditTasks && (
                   <button
                     className="btn-edit"
                     onClick={() => setEditingTask(task)}
                   >
                     Edit
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Create Task Modal */}
-      {showCreateTask && selectedProject !== "all" && (
+      {showCreateTask && selectedProject !== "all" && isAdminOrManager && (
         <CreateTask
           projectId={selectedProject}
           onClose={() => setShowCreateTask(false)}
           onSubmit={(taskData) => {
             // Add new task to sampleTasks
-            const newTask = {
+            const newTask: Task = {
               id: (sampleTasks.length + 1).toString(),
               ...taskData,
               status: "pending" as "pending" | "in_progress" | "completed",
-              assignees: taskData.assignees,
+              assignees: taskData.assignees || [],
             };
             sampleTasks.push(newTask);
             setShowCreateTask(false);

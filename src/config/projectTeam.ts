@@ -39,7 +39,7 @@ export const projectTeamMembers: TeamMember[] = [
   {
     id: "5",
     name: "Lisa Patel",
-    role: "Frontend Developer",
+    role: "Frontend ",
     email: "lisa.patel@company.com",
     position: "Developer",
   },
