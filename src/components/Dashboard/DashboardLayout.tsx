@@ -1,53 +1,43 @@
-import { type ReactNode } from "react";
-import { type User } from "../../config/users";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { User } from "../../config/users";
 import "./DashboardLayout.scss";
 
 interface DashboardLayoutProps {
   user: User;
   onLogout: () => void;
-  children: ReactNode;
 }
 
-// Define navigation items based on user role
 const getNavigationItems = (role: string) => {
   switch (role) {
     case "admin":
       return [
-        { label: "Dashboard", link: "#dashboard" },
-        { label: "Team Management", link: "#teams" },
-        { label: "Projects", link: "#projects" },
-        { label: "Settings", link: "#settings" },
+        { label: "Dashboard", link: "/" },
+        { label: "Team Management", link: "/teams" },
+        { label: "Projects", link: "/projects" },
+        { label: "Settings", link: "/settings" },
       ];
     case "manager":
       return [
-        { label: "Dashboard", link: "#dashboard" },
-        { label: "Task Management", link: "#tasks" },
-        { label: "Progress Tracking", link: "#progress" },
-        { label: "Reports", link: "#reports" },
+        { label: "Dashboard", link: "/" },
+        { label: "Task Management", link: "/tasks" },
+        { label: "Progress Tracking", link: "/progress" },
+        { label: "Reports", link: "/reports" },
       ];
     case "user":
       return [
-        { label: "Dashboard", link: "#dashboard" },
-        { label: "My Tasks", link: "#tasks" },
-        { label: "My Progress", link: "#progress" },
+        { label: "Dashboard", link: "/" },
+        { label: "My Projects", link: "/my-projects" },
       ];
-    case "viewer":
-      return [
-        { label: "Dashboard", link: "#dashboard" },
-        { label: "Projects Status", link: "#projects" },
-        { label: "Reports", link: "#reports" },
-      ];
+    case "reader":
+      return [{ label: "Dashboard", link: "/" }];
     default:
       return [];
   }
 };
 
-export function DashboardLayout({
-  user,
-  onLogout,
-  children,
-}: DashboardLayoutProps) {
+export function DashboardLayout({ user, onLogout }: DashboardLayoutProps) {
   const navigationItems = getNavigationItems(user.role);
+  const location = useLocation();
 
   return (
     <div className="dashboard-layout">
@@ -61,13 +51,13 @@ export function DashboardLayout({
 
         <nav className="dashboard-layout__sidebar-nav">
           {navigationItems.map((item) => (
-            <a
+            <Link
               key={item.link}
-              href={item.link}
-              className={item.link === "#dashboard" ? "active" : ""}
+              to={item.link}
+              className={location.pathname === item.link ? "active" : ""}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -82,7 +72,9 @@ export function DashboardLayout({
           <p>Here's what's happening in your team today</p>
         </div>
 
-        <div className="dashboard-layout__main-content">{children}</div>
+        <div className="dashboard-layout__main-content">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
