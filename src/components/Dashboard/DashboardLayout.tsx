@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { User } from "../../config/users";
+import type { User } from "../../config/users";
 import "./DashboardLayout.scss";
 
 interface DashboardLayoutProps {
@@ -12,16 +12,15 @@ const getNavigationItems = (role: string) => {
     case "admin":
       return [
         { label: "Dashboard", link: "/" },
-        { label: "Team Management", link: "/teams" },
-        { label: "Projects", link: "/projects" },
-        { label: "Settings", link: "/settings" },
+        { label: "Team Management", link: "teams" },
+        { label: "My Projects", link: "my-projects" },
       ];
     case "manager":
       return [{ label: "Dashboard", link: "/" }];
     case "user":
       return [
         { label: "Dashboard", link: "/" },
-        { label: "My Projects", link: "/my-projects" },
+        { label: "My Projects", link: "my-projects" },
       ];
     case "reader":
       return [{ label: "Dashboard", link: "/" }];
@@ -49,7 +48,7 @@ export function DashboardLayout({ user, onLogout }: DashboardLayoutProps) {
             <Link
               key={item.link}
               to={item.link}
-              className={location.pathname === item.link ? "active" : ""}
+              className={location.pathname.endsWith(item.link) ? "active" : ""}
             >
               {item.label}
             </Link>

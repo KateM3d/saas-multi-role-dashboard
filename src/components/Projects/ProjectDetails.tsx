@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
 import { sampleTasks } from "../../config/tasks";
-import { teams } from "../../config/teams";
+import { sampleTeams } from "../../config/teams";
 
 export function ProjectDetails() {
   const { projectId } = useParams();
@@ -9,7 +9,8 @@ export function ProjectDetails() {
   const projectTasks = sampleTasks.filter(
     (task) => task.projectId === projectId
   );
-  const projectTeam = teams.find((team) => team.projectId === projectId);
+  // For demo purposes, assign first team to first project, second team to second project
+  const projectTeam = sampleTeams[parseInt(projectId || "1") - 1];
 
   if (!project) {
     return <div>Project not found</div>;

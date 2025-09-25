@@ -6,7 +6,8 @@ import { DashboardLayout } from "./components/Dashboard/DashboardLayout";
 import { Login } from "./components/Login/Login";
 import { MyProjects } from "./components/Projects/MyProjects";
 import { ProjectDetails } from "./components/Projects/ProjectDetails";
-import { User } from "./config/users";
+import { TeamManagement } from "./components/Teams/TeamManagement";
+import type { User } from "./config/users";
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -33,10 +34,10 @@ function App() {
               <Route
                 index
                 element={
-                  ["reader", "manager"].includes(currentUser.role) ? (
-                    <DashboardContent user={currentUser} />
-                  ) : (
+                  currentUser.role === "admin" ? (
                     <Navigate to="/dashboard" replace />
+                  ) : (
+                    <DashboardContent user={currentUser} />
                   )
                 }
               />
@@ -45,7 +46,10 @@ function App() {
                 element={<DashboardContent user={currentUser} />}
               />
               {currentUser.role !== "reader" && (
-                <Route path="my-projects" element={<MyProjects />} />
+                <Route
+                  path="my-projects"
+                  element={<MyProjects userRole={currentUser.role} />}
+                />
               )}
               {(currentUser.role === "manager" ||
                 currentUser.role === "admin") && (
@@ -54,6 +58,16 @@ function App() {
                   element={<ProjectDetails />}
                 />
               )}
+              <Route
+                path="teams"
+                element={
+                  currentUser.role === "admin" ? (
+                    <TeamManagement />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>

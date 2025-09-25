@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
 import { User } from "../../config/users";
+import { CreateProject } from "../Projects/CreateProject";
+import "./DashboardContent.scss";
 
 interface DashboardContentProps {
   user: User;
 }
 
 export function DashboardContent({ user }: DashboardContentProps) {
+  const [showCreateProject, setShowCreateProject] = useState(false);
   const navigate = useNavigate();
 
   const renderDashboardView = (isManagerOrAdmin: boolean) => {
@@ -63,7 +67,17 @@ export function DashboardContent({ user }: DashboardContentProps) {
         </div>
 
         <div className="projects-section" style={{ marginTop: "40px" }}>
-          <h3>Projects Status</h3>
+          <div className="projects-header">
+            <h3>Projects Status</h3>
+            {user.role === "admin" && (
+              <button
+                className="btn-primary"
+                onClick={() => setShowCreateProject(true)}
+              >
+                Create Project
+              </button>
+            )}
+          </div>
           <div className="projects-grid" style={{ marginTop: "20px" }}>
             {sampleProjects.map((project) => (
               <div
@@ -108,19 +122,29 @@ export function DashboardContent({ user }: DashboardContentProps) {
   const renderContent = () => {
     const isManagerOrAdmin = user.role === "manager" || user.role === "admin";
 
-    return (
-      <div>
-        {user.role === "admin" && (
-          <div className="admin-actions">
-            <button className="btn-primary">Create Organization</button>
-            <button className="btn-primary">Create Project</button>
-            <button className="btn-primary">Manage Users</button>
-          </div>
-        )}
-        {renderDashboardView(isManagerOrAdmin)}
-      </div>
-    );
+    return <div>{renderDashboardView(isManagerOrAdmin)}</div>;
   };
 
-  return <div className="dashboard-content">{renderContent()}</div>;
+  return (
+    <div className="dashboard-content">
+      {renderContent()}
+      {showCreateProject && (
+        <CreateProject
+          onClose={() => setShowCreateProject(false)}
+          onSubmit={(projectData) => {
+            // Add new project to sampleProjects
+            const newProject = {
+              id: (sampleProjects.length + 1).toString(),
+              ...projectData,
+              status: "active",
+              progress: 0,
+              members: [],
+            };
+            sampleProjects.push(newProject);
+            setShowCreateProject(false);
+          }}
+        />
+      )}
+    </div>
+  );
 }

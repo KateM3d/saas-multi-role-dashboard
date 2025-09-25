@@ -2,58 +2,64 @@ export interface TeamMember {
   id: string;
   name: string;
   role: string;
-  avatar?: string;
+  email: string;
 }
 
 export interface Team {
   id: string;
   name: string;
-  projectId: string;
+  description: string;
   members: TeamMember[];
 }
 
-export const teams: Team[] = [
+export const sampleTeams: Team[] = [
   {
-    id: "team1",
-    name: "Alpha Team",
-    projectId: "p1", // Website Redesign project
+    id: "1",
+    name: "Quantum Research Team",
+    description: "Focused on quantum computing research and development",
     members: [
       {
         id: "m1",
         name: "Marie Curie",
         role: "Team Lead",
+        email: "marie.curie@example.com",
       },
       {
         id: "m2",
-        name: "Rosalind Franklin",
-        role: "Developer",
+        name: "Albert Einstein",
+        role: "Senior Researcher",
+        email: "albert.einstein@example.com",
       },
       {
         id: "m3",
-        name: "Ada Lovelace",
-        role: "Designer",
+        name: "Niels Bohr",
+        role: "Researcher",
+        email: "niels.bohr@example.com",
       },
     ],
   },
   {
-    id: "team2",
-    name: "Beta Team",
-    projectId: "p2", // Mobile App project
+    id: "2",
+    name: "Space Exploration Team",
+    description: "Working on advanced space exploration technologies",
     members: [
       {
         id: "m4",
-        name: "Albert Einstein",
+        name: "Carl Sagan",
         role: "Team Lead",
+        email: "carl.sagan@example.com",
       },
       {
         id: "m5",
-        name: "Nikola Tesla",
-        role: "Developer",
+        name: "Stephen Hawking",
+        role: "Senior Researcher",
+        email: "stephen.hawking@example.com",
       },
       {
         id: "m6",
-        name: "Grace Hopper",
-        role: "Developer",
+        name: "Katherine Johnson",
+        role: "Data Analyst",
+        email: "katherine.johnson@example.com",
       },
     ],
   },
