@@ -12,10 +12,7 @@ export interface Project {
     inProgress: number;
     pending: number;
   };
-  team: {
-    total: number;
-    active: number;
-  };
+  teamMembers: string[];
 }
 
 export const sampleProjects: Project[] = [
@@ -33,10 +30,12 @@ export const sampleProjects: Project[] = [
       inProgress: 8,
       pending: 4,
     },
-    team: {
-      total: 8,
-      active: 6,
-    },
+    teamMembers: [
+      "sarah.johnson@company.com",
+      "emily.rodriguez@company.com",
+      "lisa.patel@company.com",
+      "james.wilson@company.com",
+    ],
   },
   {
     id: "p2",
@@ -52,9 +51,10 @@ export const sampleProjects: Project[] = [
       inProgress: 15,
       pending: 27,
     },
-    team: {
-      total: 12,
-      active: 10,
-    },
+    teamMembers: [
+      "michael.chen@company.com",
+      "david.kim@company.com",
+      "anna.smith@company.com",
+    ],
   },
 ];

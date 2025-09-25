@@ -1,80 +1,19 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
-import { sampleTasks } from "../../config/tasks";
 import { User } from "../../config/users";
-import { UserView } from "./UserView";
+import { CreateProject } from "../Projects/CreateProject";
+import "./DashboardContent.scss";
 
 interface DashboardContentProps {
   user: User;
 }
 
 export function DashboardContent({ user }: DashboardContentProps) {
-  const renderAdminContent = () => (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        <div className="stat-card">
-          <h3>Total Teams</h3>
-          <p className="stat">8</p>
-          <span className="label">Active Teams</span>
-        </div>
-        <div className="stat-card">
-          <h3>Total Projects</h3>
-          <p className="stat">24</p>
-          <span className="label">In Progress</span>
-        </div>
-        <div className="stat-card">
-          <h3>Team Members</h3>
-          <p className="stat">47</p>
-          <span className="label">Across All Teams</span>
-        </div>
-      </div>
-    </div>
-  );
+  const [showCreateProject, setShowCreateProject] = useState(false);
+  const navigate = useNavigate();
 
-  const renderManagerContent = () => (
-    <div>
-      <h2>Manager Dashboard</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        <div className="stat-card">
-          <h3>Active Tasks</h3>
-          <p className="stat">32</p>
-          <span className="label">In Progress</span>
-        </div>
-        <div className="stat-card">
-          <h3>Team Performance</h3>
-          <p className="stat">87%</p>
-          <span className="label">Task Completion Rate</span>
-        </div>
-        <div className="stat-card">
-          <h3>Upcoming Deadlines</h3>
-          <p className="stat">5</p>
-          <span className="label">This Week</span>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderUserContent = () => (
-    <div>
-      <UserView tasks={sampleTasks} />
-    </div>
-  );
-
-  const renderViewerContent = () => {
+  const renderDashboardView = (isManagerOrAdmin: boolean) => {
     // Calculate overall project statistics
     const totalProjects = sampleProjects.length;
     const averageProgress = Math.round(
@@ -84,6 +23,12 @@ export function DashboardContent({ user }: DashboardContentProps) {
     const activeProjects = sampleProjects.filter(
       (p) => p.status === "active"
     ).length;
+
+    const handleProjectClick = (projectId: string) => {
+      if (isManagerOrAdmin) {
+        navigate(`/projects/${projectId}`);
+      }
+    };
 
     return (
       <div>
@@ -122,10 +67,27 @@ export function DashboardContent({ user }: DashboardContentProps) {
         </div>
 
         <div className="projects-section" style={{ marginTop: "40px" }}>
-          <h3>Projects Status</h3>
+          <div className="projects-header">
+            <h3>Projects Status</h3>
+            {user.role === "admin" && (
+              <button
+                className="btn-primary"
+                onClick={() => setShowCreateProject(true)}
+              >
+                Create Project
+              </button>
+            )}
+          </div>
           <div className="projects-grid" style={{ marginTop: "20px" }}>
             {sampleProjects.map((project) => (
-              <div key={project.id} className="project-card">
+              <div
+                key={project.id}
+                className="project-card"
+                onClick={() => handleProjectClick(project.id)}
+                style={{
+                  cursor: isManagerOrAdmin ? "pointer" : "default",
+                }}
+              >
                 <div className="project-header">
                   <h4>{project.name}</h4>
                   <span className={`status-badge ${project.status}`}>
@@ -158,19 +120,31 @@ export function DashboardContent({ user }: DashboardContentProps) {
   };
 
   const renderContent = () => {
-    switch (user.role) {
-      case "admin":
-        return renderAdminContent();
-      case "manager":
-        return renderManagerContent();
-      case "user":
-        return renderUserContent();
-      case "reader":
-        return renderViewerContent();
-      default:
-        return <div>No content available</div>;
-    }
+    const isManagerOrAdmin = user.role === "manager" || user.role === "admin";
+
+    return <div>{renderDashboardView(isManagerOrAdmin)}</div>;
   };
 
-  return <div className="dashboard-content">{renderContent()}</div>;
+  return (
+    <div className="dashboard-content">
+      {renderContent()}
+      {showCreateProject && (
+        <CreateProject
+          onClose={() => setShowCreateProject(false)}
+          onSubmit={(projectData) => {
+            // Add new project to sampleProjects
+            const newProject = {
+              id: (sampleProjects.length + 1).toString(),
+              ...projectData,
+              status: "active",
+              progress: 0,
+              members: [],
+            };
+            sampleProjects.push(newProject);
+            setShowCreateProject(false);
+          }}
+        />
+      )}
+    </div>
+  );
 }

@@ -1,0 +1,76 @@
+.dashboard-content {
+  .project-meta {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+    margin-top: 16px;
+
+    .project-dates {
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .project-team {
+      h5 {
+        margin: 0 0 8px;
+        color: #213448;
+        font-size: 14px;
+      }
+
+      .team-members {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .team-member {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 6px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .member-name {
+          color: #213448;
+          font-size: 13px;
+          font-weight: 500;
+        }
+
+        .member-role {
+          color: #64748b;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
+      margin: 0;
+      color: #213448;
+    }
+
+    .btn-primary {
+      padding: 8px 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #2563eb;
+      }
+    }
+  }
+}
