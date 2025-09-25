@@ -6,7 +6,7 @@ import { ProjectDetails } from "./ProjectDetails";
 
 // Mock useParams to simulate route parameters
 vi.mock("react-router-dom", () => ({
-  ...vi.importActual("react-router-dom", { allowProxy: true }),
+  ...vi.importActual("react-router-dom"),
   useParams: () => ({ projectId: "p1" }),
   BrowserRouter: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>

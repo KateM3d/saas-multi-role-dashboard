@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
-import { User } from "../../config/users";
+import type { User } from "../../config/users";
 import { CreateProject } from "../Projects/CreateProject";
 import "./DashboardContent.scss";
 

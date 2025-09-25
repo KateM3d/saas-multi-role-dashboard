@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { sampleProjects } from "../../config/projects";
 import { projectTeamMembers } from "../../config/projectTeam";
-import { sampleTasks, Task } from "../../config/tasks";
+import type { Task } from "../../config/tasks";
+import { sampleTasks } from "../../config/tasks";
 import { EditTask } from "./EditTask";
 import "./ProjectDetails.scss";
 

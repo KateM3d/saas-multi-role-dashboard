@@ -9,7 +9,8 @@ describe("DashboardLayout Component", () => {
     id: "1",
     name: "Test User",
     email: "test@example.com",
-    role: "admin",
+    role: "admin" as const,
+    password: "test123",
   };
 
   const mockOnLogout = vi.fn();
@@ -38,7 +39,7 @@ describe("DashboardLayout Component", () => {
   });
 
   it("renders navigation items based on manager role", () => {
-    const managerUser = { ...mockUser, role: "manager" };
+    const managerUser = { ...mockUser, role: "manager" as const };
     renderWithRouter(
       <DashboardLayout user={managerUser} onLogout={mockOnLogout} />
     );
@@ -49,7 +50,7 @@ describe("DashboardLayout Component", () => {
   });
 
   it("renders navigation items based on user role", () => {
-    const regularUser = { ...mockUser, role: "user" };
+    const regularUser = { ...mockUser, role: "user" as const };
     renderWithRouter(
       <DashboardLayout user={regularUser} onLogout={mockOnLogout} />
     );
@@ -60,7 +61,7 @@ describe("DashboardLayout Component", () => {
   });
 
   it("renders navigation items based on reader role", () => {
-    const readerUser = { ...mockUser, role: "reader" };
+    const readerUser = { ...mockUser, role: "reader" as const };
     renderWithRouter(
       <DashboardLayout user={readerUser} onLogout={mockOnLogout} />
     );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Task } from "../../config/tasks";
+import type { Task } from "../../config/tasks";
 import { UserAssignment } from "../Common/UserAssignment";
 import "./CreateTask.scss"; // Reusing the same styles
 

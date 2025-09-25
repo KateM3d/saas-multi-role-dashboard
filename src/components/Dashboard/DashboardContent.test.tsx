@@ -46,7 +46,8 @@ describe("DashboardContent Component", () => {
     id: "1",
     name: "Test User",
     email: "test@example.com",
-    role: "admin",
+    role: "admin" as const,
+    password: "test123",
   };
 
   beforeEach(() => {
@@ -77,7 +78,7 @@ describe("DashboardContent Component", () => {
   });
 
   it("does not render create project button for non-admin", () => {
-    const nonAdminUser = { ...mockUser, role: "manager" };
+    const nonAdminUser = { ...mockUser, role: "manager" as const };
     renderWithRouter(<DashboardContent user={nonAdminUser} />);
 
     expect(screen.queryByText("Create Project")).not.toBeInTheDocument();
@@ -115,7 +116,7 @@ describe("DashboardContent Component", () => {
   });
 
   it("makes project cards non-clickable for reader/user", () => {
-    const readerUser = { ...mockUser, role: "reader" };
+    const readerUser = { ...mockUser, role: "reader" as const };
     const { container } = renderWithRouter(
       <DashboardContent user={readerUser} />
     );

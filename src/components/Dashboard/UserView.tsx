@@ -1,7 +1,7 @@
 import { addDays, isAfter, isBefore, parseISO } from "date-fns";
 import { useState } from "react";
 import { sampleProjects } from "../../config/projects";
-import { Task } from "../../config/tasks";
+import type { Task } from "../../config/tasks";
 
 interface UserViewProps {
   tasks: Task[];
@@ -149,7 +149,7 @@ export function UserView({ tasks }: UserViewProps) {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

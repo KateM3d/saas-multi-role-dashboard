@@ -10,6 +10,7 @@ interface CreateTaskProps {
     dueDate: string;
     priority: "high" | "medium" | "low";
     projectId: string;
+    assignees: string[];
   }) => void;
   projectId: string;
 }

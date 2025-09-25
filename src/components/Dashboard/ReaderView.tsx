@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Project, sampleProjects } from "../../config/projects";
+import type { Project } from "../../config/projects";
+import { sampleProjects } from "../../config/projects";
 
 export function ReaderView() {
   const [selectedProject, setSelectedProject] = useState<Project>(
@@ -78,18 +79,16 @@ export function ReaderView() {
           <h3>Team Size</h3>
           <div className="team-stats">
             <div className="team-stat">
-              <span className="value">{selectedProject.team.active}</span>
-              <span className="label">Active Members</span>
-            </div>
-            <div className="team-stat">
-              <span className="value">{selectedProject.team.total}</span>
-              <span className="label">Total Members</span>
+              <span className="value">
+                {selectedProject.teamMembers.length}
+              </span>
+              <span className="label">Team Members</span>
             </div>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .reader-view {
           padding: 20px 0;
         }
