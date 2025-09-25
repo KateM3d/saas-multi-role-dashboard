@@ -9,7 +9,7 @@ interface DashboardContentProps {
 export function DashboardContent({ user }: DashboardContentProps) {
   const navigate = useNavigate();
 
-  const renderDashboardView = () => {
+  const renderDashboardView = (isManagerOrAdmin: boolean) => {
     // Calculate overall project statistics
     const totalProjects = sampleProjects.length;
     const averageProgress = Math.round(
@@ -21,7 +21,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
     ).length;
 
     const handleProjectClick = (projectId: string) => {
-      if (user.role === "manager") {
+      if (isManagerOrAdmin) {
         navigate(`/projects/${projectId}`);
       }
     };
@@ -71,7 +71,7 @@ export function DashboardContent({ user }: DashboardContentProps) {
                 className="project-card"
                 onClick={() => handleProjectClick(project.id)}
                 style={{
-                  cursor: user.role === "manager" ? "pointer" : "default",
+                  cursor: isManagerOrAdmin ? "pointer" : "default",
                 }}
               >
                 <div className="project-header">
@@ -106,41 +106,21 @@ export function DashboardContent({ user }: DashboardContentProps) {
   };
 
   const renderContent = () => {
-    // All roles see the same dashboard view
-    return renderDashboardView(
-      user.role === "manager" || user.role === "admin"
+    const isManagerOrAdmin = user.role === "manager" || user.role === "admin";
+
+    return (
+      <div>
+        {user.role === "admin" && (
+          <div className="admin-actions">
+            <button className="btn-primary">Create Organization</button>
+            <button className="btn-primary">Create Project</button>
+            <button className="btn-primary">Manage Users</button>
+          </div>
+        )}
+        {renderDashboardView(isManagerOrAdmin)}
+      </div>
     );
   };
-
-  const renderAdminContent = () => (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        <div className="stat-card">
-          <h3>Total Teams</h3>
-          <p className="stat">8</p>
-          <span className="label">Active Teams</span>
-        </div>
-        <div className="stat-card">
-          <h3>Total Projects</h3>
-          <p className="stat">24</p>
-          <span className="label">In Progress</span>
-        </div>
-        <div className="stat-card">
-          <h3>Team Members</h3>
-          <p className="stat">47</p>
-          <span className="label">Across All Teams</span>
-        </div>
-      </div>
-    </div>
-  );
 
   return <div className="dashboard-content">{renderContent()}</div>;
 }
